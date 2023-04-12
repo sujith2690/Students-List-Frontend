@@ -10,9 +10,9 @@ const Content = () => {
     const [remove, setRemove] = useState(false)
     const [currentId, setCurrentId] = useState('')
     const [showModel, setShowModel] = useState(false)
-    const [filteredUsers, setFilteredUsers] = useState([])
     const dispatch = useDispatch()
     const students = useSelector((state) => state.studentStore.students)
+    const [filteredUsers, setFilteredUsers] = useState([])
     const handleClose = () => setShowModel(false)
     const studentsData = async () => {
         try {
@@ -95,8 +95,9 @@ const Content = () => {
     ]
     useEffect(() => {
         const results = students.filter((user) => {
-          return user.name.toLowerCase().match(search.toLowerCase())
+          return user.name.toLowerCase().match(search.toLowerCase()) 
         });
+        console.log(results,'--filter')
         setFilteredUsers(results)
       }, [search])
 
@@ -106,7 +107,7 @@ const Content = () => {
             <DataTable
                 className='border border-black border-t-2 ml-3 mr-3'
                 columns={columns}
-                data={filteredUsers}
+                data={filteredUsers.length === 0 ? students: filteredUsers}
                 pagination
                 // fixedHeader
                 fixedHeaderScrollHeight='350px'
