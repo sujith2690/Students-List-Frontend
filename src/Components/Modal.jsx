@@ -6,7 +6,6 @@ import { GrClose } from 'react-icons/gr'
 
 const Modal = ({ visible, onClose, removed, remove, cancel }) => {
     const dispatch = useDispatch()
-    console.log('remove-------', remove)
     const [formState, setFormState] = useState({
         name: '',
         studentId: '',
@@ -19,7 +18,7 @@ const Modal = ({ visible, onClose, removed, remove, cancel }) => {
     if (!visible) return null
     const handleClose = (e) => {
         if (e.target.id === "container") {
-            removed()
+            // removed()
             onClose()
         }
     }
@@ -31,7 +30,6 @@ const Modal = ({ visible, onClose, removed, remove, cancel }) => {
    
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formState, '---------kkkkkk')
         try {
             const response = await baseUrl.post('/create', formState)
             console.log(response.data)
@@ -159,6 +157,7 @@ const Modal = ({ visible, onClose, removed, remove, cancel }) => {
                                         placeholder="Date Of Birth"
                                         name="dob"
                                         id="dob"
+                                        min='1899-01-01' max='2000-10-10'
                                         value={formState.dob}
                                         onChange={handleChange}
                                     />

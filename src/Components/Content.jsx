@@ -10,15 +10,13 @@ const Content = () => {
     const [remove, setRemove] = useState(false)
     const [currentId, setCurrentId] = useState('')
     const [showModel, setShowModel] = useState(false)
+    const [filteredUsers, setFilteredUsers] = useState([])
     const dispatch = useDispatch()
     const students = useSelector((state) => state.studentStore.students)
-    console.log(students)
     const handleClose = () => setShowModel(false)
     const studentsData = async () => {
         try {
-            console.log('its here')
             const students = await baseUrl.get('/students')
-            // setStudents(students.data)
             dispatch(storeStudents(students.data))
         } catch (error) {
 
@@ -42,7 +40,6 @@ const Content = () => {
             setCurrentId(id)
         }
 
-        console.log(id, currentId, '---------id')
     }
     const removeCancel = () => {
         if (remove) setRemove(false)
@@ -50,8 +47,15 @@ const Content = () => {
     const handleClick=()=>{
         setShowModel(true)
     }
+    const getRowNumber = (rowIndex) => {
+        return rowIndex + 1; 
+      }
     const columns = [
 
+        {
+            name: <b>No</b>,
+            selector: (row,index) =>getRowNumber(index),
+        },
         {
             name: <b>Student ID</b>,
             selector: (row) => row.studentId,
@@ -74,7 +78,7 @@ const Content = () => {
         },
         {
             name: <b>DOB</b>,
-            selector: (row) => row.dob,
+            selector: (row) => row.dob.slice(0, 10),
             sortable: true,
         },
         {
@@ -89,6 +93,12 @@ const Content = () => {
         },
 
     ]
+    useEffect(() => {
+        const results = students.filter((user) => {
+          return user.name.toLowerCase().match(search.toLowerCase())
+        });
+        setFilteredUsers(results)
+      }, [search])
 
 
     return (
@@ -96,18 +106,18 @@ const Content = () => {
             <DataTable
                 className='border border-black border-t-2 ml-3 mr-3'
                 columns={columns}
-                data={students}
+                data={filteredUsers}
                 pagination
                 // fixedHeader
-                fixedHeaderScrollHeight='390px'
+                fixedHeaderScrollHeight='350px'
                 highlightOnHover
                 subHeader
-                // subHeaderComponent={
-                //     <input type='text' className='border border-b-black ' placeholder='Search Students'
-                //         value={search}
-                //         onChange={(e) => setSearch(e.target.value)}
-                //     />
-                // }
+                subHeaderComponent={
+                    <input type='text' className='userSearch' placeholder='Search Student'
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                }
             />
             <button onClick={handleClick} className='bg-blue-800 text-white p-2 rounded-md'>Add Students</button>
 
