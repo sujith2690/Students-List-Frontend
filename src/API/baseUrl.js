@@ -1,4 +1,4 @@
 import axios from "axios";
 
-// export const baseUrl = axios.create({baseURL: "https://students-bp7z.onrender.com" })
-export const baseUrl = axios.create({baseURL: "https://strange-newt-turtleneck.cyclic.app" })
+const apiUrl = process.env.REACT_APP_BASE_URL;
+export const baseUrl = axios.create({ baseURL: apiUrl })
